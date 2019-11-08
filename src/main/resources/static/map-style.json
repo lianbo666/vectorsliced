@@ -1,0 +1,97 @@
+{
+  "version": 8,
+  "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
+  "sources": {
+    "mapbox-streets": {
+      "type": "vector",
+      "url": "mapbox://mapbox.mapbox-streets-v8"
+    },
+    "mapbox-terrain": {
+      "type": "vector",
+      "url": "mapbox://mapbox.mapbox-terrain-v2"
+    }
+  },
+  "layers": [
+    {
+      "id": "water",
+      "source": "mapbox-streets",
+      "source-layer": "water",
+      "type": "fill",
+      "paint": {
+        "fill-color": "#3399FF"
+      }
+    },
+    {
+      "id": "landuse",
+      "source": "mapbox-streets",
+      "source-layer": "landuse",
+      "type": "fill",
+      "paint": {
+        "fill-color": "#009966"
+      }
+    },
+    {
+      "id": "waterway",
+      "source": "mapbox-streets",
+      "source-layer": "waterway",
+      "type": "line",
+      "paint": {
+        "line-color": "#3399FF"
+      }
+    },
+    {
+      "id": "building",
+      "source": "mapbox-streets",
+      "source-layer": "building",
+      "type": "fill",
+      "paint": {
+        "fill-color": "#CCCCCC"
+      }
+    },
+    {
+      "id": "road",
+      "source": "mapbox-streets",
+      "source-layer": "road",
+      "type": "line",
+      "minzoom": 8,
+      "paint": {
+        "line-color": "#ff9933",
+        "line-width": {
+          "stops": [
+            [6,1],
+            [8,2]
+          ]
+        }
+      }
+    },
+    {
+      "id": "admin",
+      "source": "mapbox-streets",
+      "source-layer": "admin",
+      "type": "line",
+      "admin_level": 0,
+      "worldview": "all",
+      "maxzoom": 7,
+      "paint": {
+        "line-color": "#666666",
+        "line-width": {
+          "stops": [
+            [4,1],
+            [6,2],
+            [8,3]
+          ]
+        }
+      }
+    },
+    {
+      "id": "contour",
+      "source": "mapbox-terrain",
+      "source-layer": "contour",
+      "type": "fill",
+      "paint": {
+        "fill-color": "rgba(66,100,251, 0.3)",
+        "fill-outline-color": "rgba(66,100,251, 1)"
+      }
+    }
+  ]
+}

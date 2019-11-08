@@ -1,0 +1,80 @@
+{
+  "version": 8,
+  "name": "Map View",
+  "sources": {
+    "province-vector-tile-source": {
+      "type": "vector",
+      "tiles": [
+        "http://localhost:8080/tiles/800/polygon/{z}/{x}/{y}"
+      ],
+      "minzoom": 0,
+      "maxzoom": 20
+    },
+    "points-vector-tile-source": {
+      "type": "vector",
+      "tiles": [
+        "http://localhost:8080/tiles/800/points/{z}/{x}/{y}"
+      ],
+      "minzoom": 12,
+      "maxzoom": 20
+    }
+  },
+  "sprite": "http://127.0.0.1:8888/sprite/sprite",
+  "glyphs": "http://127.0.0.1:8888/font/{fontstack}/{range}.pbf",
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "layout": {},
+      "paint": {
+        "background-color": {
+          "stops": [
+            [
+              8,
+              "hsl(180,100%,94%)"
+            ],
+            [
+              11,
+              "hsl(180,100%,90%)"
+            ]
+          ]
+        }
+      },
+      "interactive": true
+    },
+    {
+      "id": "province-vector-tile-layer",
+      "type": "fill",
+      "source": "province-vector-tile-source",
+      "source-layer": "polygon",
+      "minzoom": 1,
+      "maxzoom": 20,
+      "layout": {},
+      "paint": {
+        "fill-outline-color": "#ECEAE6",
+        "fill-color": "#ECEAE6"
+      }
+    },
+    {
+      "id": "point_layer",
+      "type": "circle",
+      "source": "points-vector-tile-source",
+      "source-layer": "points",
+      "minzoom": 1,
+      "maxzoom": 20,
+      "layout": {},
+      "paint": {
+        "circle-color": {
+          "property": "v",
+          "stops": [
+            [0, "#990055"],
+            [1, "#2a55b9"]
+          ]
+        },
+        "circle-opacity": 1
+      }
+    }
+
+
+  ]
+}

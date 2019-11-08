@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset='utf-8'/>
+    <title>Add a third party vector tile source</title>
+    <meta http-equiv="Content-Type" content="application/x-protobuf; charset=UTF-8"/>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
+    <script src='mapbox-gl-v1.2.1.js'></script>
+    <script src="main.js"></script>
+    <link href='mapbox-gl-v1.2.1.css' rel='stylesheet'/>
+    <link rel="stylesheet" href="main.css"/>
+    <link rel="stylesheet" href="iconfont/iconfont.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+        #year{
+            display: inline;
+            border: 1px solid rgb(189,189,189);
+            border-radius: 6px;
+            padding: 4px 0px;
+            font-size: 16px;
+            width: 100px;
+            line-height: 22px;
+            text-align: center;
+            margin: 0px 2px;
+            vertical-align: middle;
+        }
+        .iconfont-outer{
+            display: inline-block;
+            width: 29px;
+            height: 29px;
+            border: 1px solid rgb(189,189,189);
+            background: #F4F1F0;
+            border-radius: 50%;
+        }
+        .iconfont-outer{
+            margin-bottom: 3px;
+        }
+        .iconfont-outer > .iconfont{
+            display: block;
+            text-align: center;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+<div id='map'></div>
+<div class='map-overlay top'>
+    <div class='map-overlay-inner'>
+        <h2>修改年份</h2>
+        <div class="iconfont-outer">
+            <span class="icon iconfont">&#xe628;</span>
+        </div>
+        <input type="text" id="year" placeholder="2072">
+        <div class="iconfont-outer">
+            <span class="icon iconfont">&#xe625;</span>
+        </div>
+        <!--滑块-->
+        <!--<input id='slider' type='range' min='188' max='2019' step='10' value='188'/>-->
+        <ul class="map-timeLine"></ul>
+    </div>
+</div>
+<script>
+/*  mapboxgl.accessToken = 'pk.eyJ1IjoicGFuamlhbndlbiIsImEiOiJjamh2Y2QyOHcweHMzM3F0YzZxbXp2MHZxIn0.GXyyIbdELQWVH93B27FbnQ';
+    var tileset = 'mapbox.streets';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        zoom: 6,
+        center: [114.883679,27.631216],
+        // style: 'mapbox://styles/mapbox/light-v9',
+        // style: '/mapconfig.json',
+        style: '/map-style.json',
+        hash: false
+    });
+*/
+    /*map.on('load', function loaded() {
+        map.addSource('province-polygon-source', {
+            type: 'vector',
+            tiles: ['http://localhost:8080/polygons/188/province/{z}/{x}/{y}']
+        });
+        map.addLayer({
+            //id全局唯一
+            "id": "province-polygon-vector-layer",
+            "type": "fill",
+            "source": "province-polygon-source",
+            "source-layer": "province",
+            "maxzoom": 9,
+            //"filter": ["==", "beg_yr", 188],
+            "layout": {},
+            "paint": {
+                "fill-outline-color": "#ff0000",
+                "fill-antialias": true,
+                //"fill-outline-width": 3,
+                "fill-color": ['get', 'color'],
+                "fill-opacity": {
+                    "stops":[
+                        [5, 0.8],
+                        [6, 0.5],
+                        [7, 0.3],
+                        [8, 0.2]
+                    ]
+                }
+            }
+        });
+        map.addLayer({
+            "id": "province-polygon-symbol-layer",
+            "type": "symbol",
+            "source": "province-polygon-source",
+            "source-layer": "province",
+            "maxzoom": 9,
+            "layout": {
+                "text-line-height": 1.1,
+                "text-size": 16,
+                "text-offset": [0,1.5],
+                "symbol-placement": "point",
+                "symbol-avoid-edges": true,
+                //"text-field": "{name_ch}",
+                "text-field": [
+                    "format",
+                    ["get", "name_ch"],{"font-scale": 0.8},
+                    "-",{},
+                    ["get", "name_py"],{"font-scale": 0.6}
+                ],
+                "text-letter-spacing": 0.1,
+                "text-justify": "auto",
+                "text-max-width": 5000
+            },
+            "paint": {
+                "text-color": "#00f",
+                "text-halo-width": 1.25,
+                "text-opacity": 1
+            }
+        });
+        document.getElementById('year').innerText = 188;
+        document.getElementById('slider').addEventListener('change', function (e) {
+            document.getElementById('year').innerText = e.target.value;
+            map.removeLayer('province-polygon-vector-layer');
+            map.removeLayer('province-polygon-symbol-layer');
+            // map.removeLayer('province-point-vector-layer');
+            // map.removeLayer('province-point-symbol-layer');
+            map.removeSource('province-polygon-source');
+            // map.removeSource('province-point-source');
+
+            map.addSource('province-polygon-source', {
+                type: 'vector',
+                tiles: ['http://localhost:8080/polygons/' + e.target.value + '/province/{z}/{x}/{y}']
+            });
+            map.addLayer({
+                //id全局唯一
+                "id": "province-polygon-vector-layer",
+                "type": "fill",
+                "source": "province-polygon-source",
+                "source-layer": "province",
+                "maxzoom": 9,
+                //"filter": ["==", "beg_yr", 188],
+                "layout": {},
+                "paint": {
+                    "fill-outline-color": "#ff0000",
+                    "fill-antialias": true,
+                    //"fill-outline-width": 3,
+                    "fill-color": ['get', 'color'],
+                    "fill-opacity": {
+                        "stops":[
+                            [5, 0.8],
+                            [6, 0.5],
+                            [7, 0.3],
+                            [8, 0.2]
+                        ]
+                    }
+                }
+            });
+            map.addLayer({
+                "id": "province-polygon-symbol-layer",
+                "type": "symbol",
+                "source": "province-polygon-source",
+                "source-layer": "province",
+                "maxzoom": 9,
+                "layout": {
+                    "text-line-height": 1.1,
+                    "text-size": 16,
+                    "text-offset": [0,1.5],
+                    "symbol-placement": "point",
+                    "symbol-avoid-edges": true,
+                    // "text-field": "{name_ch}",
+                    "text-field": [
+                        "format",
+                        ["get", "name_ch"],{"font-scale": 0.8},
+                        "-",{},
+                        ["get", "name_py"],{"font-scale": 0.6}
+                    ],
+                    "text-letter-spacing": 0.1,
+                    "text-justify": "auto",
+                    "text-max-width": 5000
+                },
+                "paint": {
+                    "text-color": "#00f",
+                    "text-halo-width": 1.25,
+                    "text-opacity": 1
+                }
+            });
+
+            map.addSource('points-vector-tile-source', {
+                type: 'vector',
+                tiles: ['http://localhost:8080/tiles/' + e.target.value + '/points/{z}/{x}/{y}']
+            });
+            map.addLayer({
+                "id": "point_layer",
+                "type": "circle",
+                "source": "points-vector-tile-source",
+                "source-layer": "points",
+                'paint': {
+                    'circle-color': {
+                        property: 'v',
+                        stops: [
+                            [0, '#990055'],
+                            [1, '#2a55b9']
+                        ]
+                    },
+                    'circle-opacity': 1
+                }
+            })
+
+        });
+
+    });*/
+    mp_obj.mapInit();
+</script>
+</body>
+</html>
